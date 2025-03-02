@@ -2,8 +2,11 @@ package src.lox;
 
 import java.util.List;
 
+import src.lox.Expr.Variable;
+
 class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
+	private boolean isRepl = false;
 	private Environment environment = new Environment();
 
 	void interpret(List<Stmt> statements) { 
@@ -14,6 +17,10 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 		} catch (RuntimeError error) {
 			Lox.runtimeError(error);
 		}
+	}
+
+	public void setRepl(boolean isRepl){
+		this.isRepl = isRepl;
 	}
 
 	@Override
@@ -88,7 +95,10 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
 	@Override
 	public Void visitExpressionStmt(Stmt.Expression stmt) {
-		evaluate(stmt.expression);
+		Object evaluation = evaluate(stmt.expression);
+		if (isRepl == true){
+			System.out.println(stringify(evaluation));
+		}
 		return null;
 	}
 
@@ -119,7 +129,11 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
 	@Override
 	public Object visitVariableExpr(Expr.Variable expr) {
-		return environment.get(expr.name);
+		Object variableValue = environment.get(expr.name);
+		if (variableValue == null){
+			throw new RuntimeError(expr.name, "Undefined variable '" + expr.name.lexeme + "'.");
+		}
+		return variableValue;
 	}
 
 	@Override

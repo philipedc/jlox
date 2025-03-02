@@ -13,14 +13,25 @@ public class Lox {
 	private static final Interpreter interpreter = new Interpreter();
 	static boolean hadError = false;
 	static boolean hadRuntimeError = false;
+	static boolean debug = false;
 
 	public static void main(String[] args) throws IOException {
-		if (args.length > 1) {
-			System.out.println("Usage: jlox [script]");
+
+		int nonParameterArgs = args.length;
+		for (String arg : args) {
+			if (arg.equals("--debug")) {
+				debug = true;
+				nonParameterArgs--;
+			}
+		}
+
+		if (nonParameterArgs > 1) {
+			System.out.println("Usage: jlox [script] [--debug]");
 			System.exit(64); 
-    	} else if (args.length == 1) {
+    	} else if (nonParameterArgs == 1) {
     		runFile(args[0]);
 		} else {
+			interpreter.setRepl(true);
 			runPrompt();
 		}
 	}
@@ -50,11 +61,13 @@ public class Lox {
 		Scanner scanner = new Scanner(source);
 		List<Token> tokens = scanner.scanTokens();
 
+		if (debug) {
 		System.out.println("Tokens:");
 		for (Token token : tokens) {
 			System.out.println(token);
 		}
 		System.out.println("-----------------");
+		}
 
 		Parser parser = new Parser(tokens);
 		List<Stmt> statements = parser.parse();

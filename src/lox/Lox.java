@@ -57,14 +57,14 @@ public class Lox {
 		System.out.println("-----------------");
 
 		Parser parser = new Parser(tokens);
-		Expr expression = parser.parse();
+		List<Stmt> statements = parser.parse();
 		if (hadError) return;
 
-		System.out.println("Abstract Syntax Tree in Reverse Polish Notation:");
-		System.out.println(new AstPrinterRPN().print(expression));
-		System.out.println("-----------------");
+		// System.out.println("Abstract Syntax Tree in Reverse Polish Notation:");
+		// System.out.println(new AstPrinterRPN().print(expression));
+		// System.out.println("-----------------");
 
-		interpreter.interpret(expression);
+		interpreter.interpret(statements);
 	}
 
 	static void error(int line, String message) {

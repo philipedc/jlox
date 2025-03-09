@@ -1,0 +1,35 @@
+var a = 0;
+var tmp;
+var b = 1;
+
+// first 20 fibonnaci's numbers
+for (var counter = 0; counter < 20; counter = counter + 1){
+	print a;
+	tmp = b;
+	b = b + a;
+	a = tmp;
+}
+
+/*
+Expected result:
+0
+1
+1
+2
+3
+5
+8
+13
+21
+34
+55
+89
+144
+233
+377
+610
+987
+1597
+2584
+4181
+*/

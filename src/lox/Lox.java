@@ -62,20 +62,26 @@ public class Lox {
 		List<Token> tokens = scanner.scanTokens();
 
 		if (debug) {
-		System.out.println("Tokens:");
-		for (Token token : tokens) {
-			System.out.println(token);
+			System.out.println("Tokens:");
+			for (Token token : tokens) {
+				System.out.println(token);
+			}
+			System.out.println("-----------------");
 		}
-		System.out.println("-----------------");
-		}
-
+		
 		Parser parser = new Parser(tokens);
+		
+		// TODO: Add AST generated
+
+		// if (debug) {
+		// }
+
 		List<Stmt> statements = parser.parse();
 		if (hadError) return;
 
-		// System.out.println("Abstract Syntax Tree in Reverse Polish Notation:");
-		// System.out.println(new AstPrinterRPN().print(expression));
-		// System.out.println("-----------------");
+		Resolver resolver = new Resolver(interpreter);
+		resolver.resolve(statements);
+		if (hadError) return;
 
 		interpreter.interpret(statements);
 	}

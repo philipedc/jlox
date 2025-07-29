@@ -1,0 +1,28 @@
+// return nth fibonnaci's number
+fun fibonnaci(n){
+  return fibonnaci_helper(0, 1, 0, n);
+}
+
+fun fibonnaci_helper(first, second, current, n){
+  if (current == n){
+    return first;
+  }
+  return fibonnaci_helper(second, first+second, current+1, n);
+}
+
+// also returns nth fibonnaci's number
+fun fibonnaci_cooler(n){
+  if (n <= 1){
+    return n;
+  }
+  return fibonnaci_cooler(n-1) + fibonnaci_cooler(n-2);
+}
+
+print fibonnaci(10);
+print fibonnaci_cooler(10);
+
+/*
+Expected result:
+55
+55
+*/
